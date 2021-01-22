@@ -9,10 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 
-public interface TransactionRepository extends CrudRepository<Transaction,Long> {
-
-    @Query("SELECT t FROM Transaction t WHERE CONCAT(t.userId) LIKE %?1%")
-    List<Transaction> findByUserId(@Param("userId") Long userId);
+public interface TransactionRepository extends CrudRepository<Transaction, Long> {
 
     @Transactional
     @Modifying

@@ -20,19 +20,16 @@ public class Transaction {
     private String timeCreated;
     @Column
     private String timeUpdated;
+
+    Transaction(){
+    }
     /*
-    Transaction(){}
-          Transaction(String firstName, String lastName, Long amount){
-           this.firstName = firstName;
-           this.lastName = lastName;
+    Transaction(Long userId, Long amount, String timeCreated){
+           this.userId = userId;
            this.amount = amount;
-       }
-       Transaction(String name, Long amount){
-           String[] parts = name.split(" ");
-           this.firstName = parts[0];
-           this.lastName = parts[1];
-           this.amount = amount;
-       }
+           this.timeCreated = timeCreated;
+           this.timeUpdated = timeUpdated;
+    }
     */
 
     public Long getTransactionId() {

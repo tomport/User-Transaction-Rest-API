@@ -13,7 +13,10 @@ public class UserTransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserTransactionRepository userTransactionRepository;
 
     public User addNewUser(User user) {
         return userRepository.save(user);
@@ -52,13 +55,17 @@ public class UserTransactionService {
         if (userRepository.existsById(transaction.getUserId())) {
             transaction.setTimeCreated();
             transaction.setTimeUpdated();
+            UserTransaction userTransaction = new UserTransaction(transaction.getUserId());
+            userTransactionRepository.save(userTransaction);
             return transactionRepository.save(transaction);
-        } else {
+        }
+        else {
             return null;
         }
     }
 
     public String removeTransaction(Long transactionId) {
+        userTransactionRepository.deleteById(transactionId);
         transactionRepository.deleteById(transactionId);
         return "Deleted";
     }
@@ -73,18 +80,39 @@ public class UserTransactionService {
         return transactionRepository.findById(transactionId).get();
     }
 
-    public List<Transaction> getTransactionByUserId(Long userId) {
-        return transactionRepository.findByUserId(userId);
+    public List<Transaction> getTransactionsByUser(Long userId) {
+        List<UserTransaction> userTransactions = userTransactionRepository.findByUserId(userId);
+        List<Transaction> transactions = new ArrayList<Transaction>();
+
+        while(!userTransactions.isEmpty()){
+            transactions.add(transactionRepository.findById(userTransactions.get(0).getTransactionId()).get());
+            userTransactions.remove(0);
+        }
+        return transactions;
+    }
+    public Long getTransactionSumByUser(Long userId) {
+        List<UserTransaction> userTransactions = userTransactionRepository.findByUserId(userId);
+        Long sum = new Long(0);
+        while(!userTransactions.isEmpty()){
+            sum += transactionRepository.findById(userTransactions.get(0).getTransactionId()).get().getAmount();
+            userTransactions.remove(0);
+        }
+        return sum;
     }
 
     public Transaction updateTransactionById(Transaction transaction, Long transactionId) {
         if (transactionRepository.existsById(transactionId)) {
+            userTransactionRepository.setUserTransactionInfoById(transaction.getUserId(), transactionId);
             transactionRepository.setTransactionInfoById(transaction.getUserId(), transaction.getAmount(),
                     new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()), transactionId);
+
             return getTransactionById(transactionId);
-        } else {
+        }
+        else {
             transaction.setTimeCreated();
             transaction.setTimeUpdated();
+            UserTransaction userTransaction = new UserTransaction(transaction.getUserId());
+            userTransactionRepository.save(userTransaction);
             return transactionRepository.save(transaction);
         }
     }
