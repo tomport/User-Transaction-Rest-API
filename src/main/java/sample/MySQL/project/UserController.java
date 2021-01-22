@@ -2,52 +2,38 @@ package sample.MySQL.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    UserTransactionService userTransactionService;
 
     @PostMapping("/users")
-    private User addNewUser(@RequestBody User user) {
-        return userRepository.save(user);
+    private User addUser(@RequestBody User user) {
+        return userTransactionService.addNewUser(user);
     }
     @DeleteMapping("/users/{userId}")
-    private String deleteUser(@PathVariable("userId") Long userId)
-    {
-        userRepository.deleteById(userId);
-        return "Deleted";
+    private String deleteUser(@PathVariable("userId") Long userId) {
+        return userTransactionService.removeUser(userId);
     }
     @GetMapping("/users")
     private List<User> getAllUsers() {
-        List<User> users = new ArrayList<User>();
-        userRepository.findAll().forEach(users::add);
-        return users;
+        return userTransactionService.getUsers();
     }
     @GetMapping("/users/{userId}")
-    private User getUser(@PathVariable("userId") Long userId)
-    {
-        return userRepository.findById(userId).get();
+    private User getById(@PathVariable("userId") Long userId) {
+        return userTransactionService.getUserById(userId);
     }
-    @PutMapping("/users/{userId}")
-    private User updateUser(@RequestBody User user, @PathVariable("userId") Long userId)
-    {
-        return userRepository.findById(userId)
-                .map(user1 -> {
-                    user1.setFirstName(user.getFirstName());
-                    user1.setLastName(user.getLastName());
-                    return userRepository.save(user1);
-                })
-                .orElseGet(() -> {
-                    user.setUserId(userId);
-                    return userRepository.save(user);
-                });
-    }
+
     @GetMapping("/users/byLastName/{lastName}")
-    private List<User> getUsersByLastName(@PathVariable("lastName") String lastName) {
-        return userRepository.findByLastName(lastName);
+    private List<User> getByLastName(@PathVariable("lastName") String lastName) {
+        return userTransactionService.getUserByLastName(lastName);
     }
+
+    @PutMapping("/users/{userId}")
+    private User updateUser(@RequestBody User user, @PathVariable("userId") Long userId) {
+        return userTransactionService.updateUserById(user, userId);
+    }
+
 }

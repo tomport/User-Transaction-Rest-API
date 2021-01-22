@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>sample</groupId>
-	<artifactId>MySQL.project</artifactId>
+	<artifactId>mySQL.project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MySQL.project</name>
+	<name>mySQL.project</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
