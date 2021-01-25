@@ -1,7 +1,9 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import userTransactionRestAPI.userTransaction.UserTransactionService;
+
 import java.util.List;
 
 @RestController

@@ -1,4 +1,4 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.transaction;
 
 
 import javax.persistence.*;
@@ -24,7 +24,7 @@ public class Transaction {
     Transaction(){
     }
     /*
-    Transaction(Long userId, Long amount, String timeCreated){
+    userTransactionRestAPI.transaction(Long userId, Long amount, String timeCreated){
            this.userId = userId;
            this.amount = amount;
            this.timeCreated = timeCreated;

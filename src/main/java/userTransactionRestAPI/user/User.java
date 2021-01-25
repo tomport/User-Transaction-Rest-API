@@ -1,4 +1,4 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.user;
 
 import javax.persistence.*;
 
@@ -14,13 +14,13 @@ public class User {
     @Column
     private String lastName;
     /*
-    User(){}
-          User(String firstName, String lastName, Long amount){
+    userTransactionRestAPI.user(){}
+          userTransactionRestAPI.user(String firstName, String lastName, Long amount){
            this.firstName = firstName;
            this.lastName = lastName;
            this.amount = amount;
        }
-       User(String name, Long amount){
+       userTransactionRestAPI.user(String name, Long amount){
            String[] parts = name.split(" ");
            this.firstName = parts[0];
            this.lastName = parts[1];

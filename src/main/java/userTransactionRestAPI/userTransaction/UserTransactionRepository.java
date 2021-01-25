@@ -1,4 +1,4 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.userTransaction;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface UserTransactionRepository extends CrudRepository<UserTransaction, Long> {
 
-    @Query("SELECT t FROM UserTransaction t WHERE CONCAT(t.userId) LIKE %?1%")
+    @Query(value = "SELECT * FROM user_transactions u WHERE CONCAT(u.user_id) LIKE %?1%", nativeQuery = true)
     List<UserTransaction> findByUserId(@Param("userId") Long userId);
 
     @Transactional
     @Modifying
-    @Query("update UserTransaction t set t.userId = ?1 where t.transactionId = ?2")
+    @Query(value = "update user_transactions u set u.user_id = ?1 where u.transaction_id = ?2", nativeQuery = true)
     void setUserTransactionInfoById(@Param("userId") Long userId, @Param("transactionId") Long transactionId);
 }

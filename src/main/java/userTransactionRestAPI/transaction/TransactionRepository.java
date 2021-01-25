@@ -1,4 +1,4 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.transaction;
 
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,7 +12,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
 
     @Transactional
     @Modifying
-    @Query("update Transaction t set t.userId = ?1, t.amount = ?2, t.timeUpdated = ?3 where t.transactionId = ?4")
+    @Query(value = "update transactions t set t.user_id = ?1, t.amount = ?2, t.time_updated = ?3 where t.transaction_id = ?4", nativeQuery = true)
     void setTransactionInfoById(@Param("userId") Long userId, @Param("amount") Long amount,
                                 @Param("timeUpdated") String timeUpdated, @Param("transactionId") Long transactionId);
 

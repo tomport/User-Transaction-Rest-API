@@ -1,5 +1,8 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.userTransaction;
 
+
+import userTransactionRestAPI.user.*;
+import userTransactionRestAPI.transaction.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @Service
 public class UserTransactionService {
@@ -64,6 +68,13 @@ public class UserTransactionService {
         }
     }
 
+    public List<Transaction> addNewTransactions(List<Transaction> transactions) {
+        List<Transaction> added = new ArrayList<Transaction>();
+        for(Transaction t : transactions){
+            added.add(addNewTransaction(t));
+        }
+        return added;
+    }
     public String removeTransaction(Long transactionId) {
         userTransactionRepository.deleteById(transactionId);
         transactionRepository.deleteById(transactionId);
@@ -92,7 +103,7 @@ public class UserTransactionService {
     }
     public Long getTransactionSumByUser(Long userId) {
         List<UserTransaction> userTransactions = userTransactionRepository.findByUserId(userId);
-        Long sum = new Long(0);
+        Long sum = 0L;
         while(!userTransactions.isEmpty()){
             sum += transactionRepository.findById(userTransactions.get(0).getTransactionId()).get().getAmount();
             userTransactions.remove(0);

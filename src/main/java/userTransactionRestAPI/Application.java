@@ -1,8 +1,12 @@
-package sample.MySQL.project;
+package userTransactionRestAPI;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
+@ComponentScan("userTransactionRestAPI.*")
 @SpringBootApplication
 public class Application {
 

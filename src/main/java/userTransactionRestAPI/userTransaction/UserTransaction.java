@@ -1,4 +1,4 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.userTransaction;
 
 
 import javax.persistence.*;

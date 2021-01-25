@@ -1,7 +1,10 @@
-package sample.MySQL.project;
+package userTransactionRestAPI.transaction;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import userTransactionRestAPI.userTransaction.UserTransactionService;
+
 import java.util.List;
 
 
@@ -13,6 +16,10 @@ public class TransactionController {
     @PostMapping("/transactions")
     private Transaction addTransaction(@RequestBody Transaction transaction) {
         return userTransactionService.addNewTransaction(transaction);
+    }
+    @PostMapping("/transactions/multiple")
+    private List<Transaction> addTransactions(@RequestBody List<Transaction> transactions) {
+        return userTransactionService.addNewTransactions(transactions);
     }
     @DeleteMapping("/transactions/{transactionId}")
     private String deleteTransaction(@PathVariable("transactionId") Long transactionId) {
