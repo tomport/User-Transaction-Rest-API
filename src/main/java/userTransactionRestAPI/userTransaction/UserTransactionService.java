@@ -1,6 +1,8 @@
 package userTransactionRestAPI.userTransaction;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import userTransactionRestAPI.user.*;
 import userTransactionRestAPI.transaction.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,20 @@ public class UserTransactionService {
     private UserTransactionRepository userTransactionRepository;
 
     public User addNewUser(User user) {
+        if(user.getFirstName() == null|| user.getLastName() == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_ACCEPTABLE, "Name incomplete.");
+        }
         return userRepository.save(user);
     }
 
     public String removeUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "user does not exist.");
+        }
         userRepository.deleteById(userId);
-        return "Deleted";
+        return "User removed.";
     }
 
     public List<User> getUsers() {
@@ -38,6 +48,10 @@ public class UserTransactionService {
     }
 
     public User getUserById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "user does not exist.");
+        }
         return userRepository.findById(userId).get();
     }
 
@@ -46,29 +60,40 @@ public class UserTransactionService {
     }
 
     public User updateUserById(User user, Long userId) {
-        if (userRepository.existsById(userId)) {
-            userRepository.setUserInfoById(user.getFirstName(),
-                    user.getLastName(), userId);
-            return getUserById(userId);
-        } else {
+        if(user.getFirstName() == null|| user.getLastName() == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_ACCEPTABLE, "Name incomplete.");
+        }
+        if (!userRepository.existsById(userId)) {
             return userRepository.save(user);
         }
+        userRepository.setUserInfoById(user.getFirstName(),
+                user.getLastName(), userId);
+        return getUserById(userId);
     }
 
     public Transaction addNewTransaction(Transaction transaction) {
-        if (userRepository.existsById(transaction.getUserId())) {
-            transaction.setTimeCreated();
-            transaction.setTimeUpdated();
-            UserTransaction userTransaction = new UserTransaction(transaction.getUserId());
-            userTransactionRepository.save(userTransaction);
-            return transactionRepository.save(transaction);
+        if(!userRepository.existsById(transaction.getUserId())){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "user does not exist");
         }
-        else {
-            return null;
+        if(transaction.getAmount() == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_ACCEPTABLE, "Amount is missing.");
         }
+        transaction.setTimeCreated();
+        transaction.setTimeUpdated();
+        UserTransaction userTransaction = new UserTransaction(transaction.getUserId());
+        userTransactionRepository.save(userTransaction);
+        return transactionRepository.save(transaction);
+
     }
 
     public List<Transaction> addNewTransactions(List<Transaction> transactions) {
+        if(transactions.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No transactions in input.");
+        }
         List<Transaction> added = new ArrayList<Transaction>();
         for(Transaction t : transactions){
             added.add(addNewTransaction(t));
@@ -76,22 +101,38 @@ public class UserTransactionService {
         return added;
     }
     public String removeTransaction(Long transactionId) {
+        if (!transactionRepository.existsById(transactionId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Transaction does not exist.");
+        }
         userTransactionRepository.deleteById(transactionId);
         transactionRepository.deleteById(transactionId);
-        return "Deleted";
+        return "Transaction removed.";
     }
 
     public List<Transaction> getTransactions() {
+        if(transactionRepository.count() == 0){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No transactions exist.");
+        }
         List<Transaction> transactions = new ArrayList<Transaction>();
         transactionRepository.findAll().forEach(transactions::add);
         return transactions;
     }
 
     public Transaction getTransactionById(Long transactionId) {
+        if (!transactionRepository.existsById(transactionId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Transaction does not exist.");
+        }
         return transactionRepository.findById(transactionId).get();
     }
 
     public List<Transaction> getTransactionsByUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User does not exist");
+        }
         List<UserTransaction> userTransactions = userTransactionRepository.findByUserId(userId);
         List<Transaction> transactions = new ArrayList<Transaction>();
 
@@ -102,6 +143,10 @@ public class UserTransactionService {
         return transactions;
     }
     public Long getTransactionSumByUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User does not exist");
+        }
         List<UserTransaction> userTransactions = userTransactionRepository.findByUserId(userId);
         Long sum = 0L;
         while(!userTransactions.isEmpty()){
@@ -112,6 +157,14 @@ public class UserTransactionService {
     }
 
     public Transaction updateTransactionById(Transaction transaction, Long transactionId) {
+        if(!userRepository.existsById(transaction.getUserId())){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "user does not exist");
+        }
+        if(transaction.getAmount() == null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_ACCEPTABLE, "Amount is missing.");
+        }
         if (transactionRepository.existsById(transactionId)) {
             userTransactionRepository.setUserTransactionInfoById(transaction.getUserId(), transactionId);
             transactionRepository.setTransactionInfoById(transaction.getUserId(), transaction.getAmount(),

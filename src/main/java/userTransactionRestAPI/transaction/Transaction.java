@@ -23,14 +23,6 @@ public class Transaction {
 
     Transaction(){
     }
-    /*
-    userTransactionRestAPI.transaction(Long userId, Long amount, String timeCreated){
-           this.userId = userId;
-           this.amount = amount;
-           this.timeCreated = timeCreated;
-           this.timeUpdated = timeUpdated;
-    }
-    */
 
     public Long getTransactionId() {
         return this.transactionId;

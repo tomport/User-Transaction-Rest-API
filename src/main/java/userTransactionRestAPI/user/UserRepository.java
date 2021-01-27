@@ -14,7 +14,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     
     @Transactional
     @Modifying
-    @Query(value = "update users t set t.first_name = ?1, t.last_name = ?2 where t.user_id = ?3", nativeQuery = true)
+    @Query(value = "update users u set u.first_name = ?1, u.last_name = ?2 where u.user_id = ?3", nativeQuery = true)
     void setUserInfoById(@Param("firstName") String firstName,
                                 @Param("lastName") String lastName, @Param("userId") Long userId);
 }

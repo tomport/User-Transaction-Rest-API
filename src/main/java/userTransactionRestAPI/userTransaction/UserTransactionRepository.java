@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface UserTransactionRepository extends CrudRepository<UserTransaction, Long> {
 
-    @Query(value = "SELECT * FROM user_transactions u WHERE CONCAT(u.user_id) LIKE %?1%", nativeQuery = true)
+    @Query(value = "SELECT * FROM user_transactions ut WHERE CONCAT(ut.user_id) LIKE %?1%", nativeQuery = true)
     List<UserTransaction> findByUserId(@Param("userId") Long userId);
 
     @Transactional
     @Modifying
-    @Query(value = "update user_transactions u set u.user_id = ?1 where u.transaction_id = ?2", nativeQuery = true)
+    @Query(value = "update user_transactions ut set ut.user_id = ?1 where ut.transaction_id = ?2", nativeQuery = true)
     void setUserTransactionInfoById(@Param("userId") Long userId, @Param("transactionId") Long transactionId);
 }
