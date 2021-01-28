@@ -13,20 +13,16 @@ public class User {
     private String firstName;
     @Column
     private String lastName;
-    /*
-    userTransactionRestAPI.user(){}
-          userTransactionRestAPI.user(String firstName, String lastName, Long amount){
+    User(){}
+    public User(String firstName, String lastName){
            this.firstName = firstName;
            this.lastName = lastName;
-           this.amount = amount;
-       }
-       userTransactionRestAPI.user(String name, Long amount){
+    }
+    public User(String name){
            String[] parts = name.split(" ");
            this.firstName = parts[0];
            this.lastName = parts[1];
-           this.amount = amount;
-       }
-    */
+    }
     public void setName(String name) {
         String[] parts = name.split(" ");
         this.firstName = parts[0];
@@ -39,10 +35,10 @@ public class User {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
     public String getFirstName() {
         return this.firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -50,7 +46,7 @@ public class User {
     public String getLastName() {
         return this.lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }}
+    }
+}

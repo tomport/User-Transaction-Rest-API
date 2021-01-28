@@ -13,6 +13,11 @@ public class UserTransaction {
     @Column
     private Long userId;
 
+    public UserTransaction(){};
+    public UserTransaction(Long userId){
+        this.userId = userId;
+    }
+
     public Long getTransactionId() {
         return this.transactionId;
     }
@@ -24,11 +29,6 @@ public class UserTransaction {
         return this.userId;
     }
     public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    UserTransaction(){};
-    UserTransaction(Long userId){
         this.userId = userId;
     }
 }
